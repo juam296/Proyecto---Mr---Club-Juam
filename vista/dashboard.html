@@ -11,35 +11,67 @@
     <style>
         .icono-principal {
             font-size: 45px; 
-            color: blue;
+            color: rgb(14, 123, 224);
+        }
+        .icono-principal-asociado {
+            font-size: 45px; 
+            color: rgb(70, 160, 70);
+        }
+        .modulo-card {
+            border-top: 3px solid #2862a0;
+            border-radius: 10px;
+            transition: 0.3s;
+            cursor: pointer;
+            height: 100%;
+        }
+        .modulo-card.asociado {
+            border-top-color: #2e6d2e;
+        }
+        .modulo-card:hover {
+            transform: translateX(3px) translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.781) !important; 
+        }
+        body {
+            background-color: #81aad3;
+            font-family: tahoma, sans-serif;
+        }
+        .header-mr {
+            background-color: #5aabb9;
+            box-shadow: 0 2px 4px rgba(62, 183, 192, 0.336);
+            padding: 20px 30px;
+        }
+        h4, strong {
+            margin-top: 10px;
+            color: #2862a0;
+        }
+        .text-primary {
+            color: #2862a0 !important;
         }
     </style>
 </head>
 
-<body class="bg-light">
+<body class="bg-ligth">
 
     <div class="header-mr d-flex justify-content-between align-items-center p-3 bg-white shadow-sm">
         <h3>CLUB ACERIAS - Panel principal</h3>
         <div class="text-end">
-            <small class="d-block text-muted">Pepito Pérez</small>
-            <button class="btn btn-danger btn-sm mt-1">
+            <small id="nombreUsuario" class="d-block text-muted fw-bold"></small>
+            <button id="btnCerrar" class="btn btn-danger btn-sm mt-1" onclick="cerrarSesion()">
                 <i class="bi bi-box-arrow-right"></i> Cerrar sesión
             </button>
         </div>
     </div>
 
     <div class="container py-4">
-        <h5 class="mb-4 fw-bold">Módulos del club de asociados</h5>
         
         <div id="tarjetasAdmin" class="row g-4">
+            <h5 class="mb-2 fw-bold text-white">Módulos del Administrador</h5>
             <div class="col-md-3">
                 <div class="card modulo-card shadow-sm p-3">
                     <i class="bi bi-people icono-principal"></i>
                     <h4 class="text-primary">Asociados</h4>
                     <strong>Gestión de asociados</strong>
-                    <p class="small text-muted mt-2">
-                        Administra la información de los asociados, incluyendo sus datos personales, historial de membresía y estado de cuenta.
-                    </p>
+                    <p class="small text-muted mt-2">Administra la información de los asociados, incluyendo sus datos personales y estado de cuenta.</p>
                 </div>
             </div>
 
@@ -48,9 +80,7 @@
                     <i class="bi bi-calendar-event icono-principal"></i>
                     <h4 class="text-primary">Actividades</h4>
                     <strong>Gestión de Actividades</strong>
-                    <p class="small text-muted mt-2">
-                        Administra la información de las actividades, incluyendo sus datos, historial y programación.
-                    </p>
+                    <p class="small text-muted mt-2">Administra la información de las actividades, incluyendo sus datos, historial y programación.</p>
                 </div>
             </div>
 
@@ -59,14 +89,40 @@
                     <i class="bi bi-person-check icono-principal"></i>
                     <h4 class="text-primary">Prestamos</h4>
                     <strong>Gestión de Prestamos</strong>
-                    <p class="small text-muted mt-2">
-                        Administra la información de los préstamos, incluyendo sus datos, historial y programación.
-                    </p>
+                    <p class="small text-muted mt-2">Administra la información de los préstamos, incluyendo sus datos, historial y programación.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="card modulo-card shadow-sm p-3">
+                    <i class="bi bi-chat-square-text icono-principal"></i>
+                    <h4 class="text-primary">Reportes</h4>
+                    <strong>Gestión de Reportes</strong>
+                    <p class="small text-muted mt-2">Administra la información de los reportes, incluyendo sus datos, historial y programación.</p>
                 </div>
             </div>
         </div>
+
+        <div id="tarjetasAsociado" class="row g-4 d-none">
+            <h5 class="mb-2 fw-bold text-white">Módulos del Asociado</h5>
+            <div class="col-md-3">
+                <div class="card modulo-card asociado shadow-sm p-3">
+                    <i class="bi bi-person icono-principal-asociado"></i>
+                    <h4 class="text-success mt-2">Mi Perfil</h4>
+                    <p class="small text-muted mt-2">Administra la información de tu perfil, incluyendo tus datos personales y estado de cuenta.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card modulo-card asociado shadow-sm p-3">
+                    <i class="bi bi-coin icono-principal-asociado"></i>
+                    <h4 class="text-success mt-2">Mis Pagos</h4>
+                    <p class="small text-muted mt-2">Administra la información de tus pagos, incluyendo detalles, historial y estado de cuenta.</p>
+                </div>
+            </div>
+        </div>
+
     </div>
 
+    <script src="../controlador/dashboard.js"></script>
 </body>
-
 </html>
