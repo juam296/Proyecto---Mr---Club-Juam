@@ -18,8 +18,12 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('tarjetasAsociado').classList.remove('d-none');
     }
 
-    function cerrarSesion() {
-        localStorage.clear();
-        window.location.href = '../vista/login.html';
+    // Funcionalidad extra para el botón de cerrar sesión
+    const btnCerrar = document.getElementById('btnCerrar');
+    if(btnCerrar) {
+        btnCerrar.addEventListener('click', () => {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        });
     }
 });
