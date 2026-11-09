@@ -10,18 +10,20 @@
     <body>
         <div class="contenedor-formulario">
             <h2> Registro de asociados <h2>
-                <p> Ingrese sus datos </p>
+                    <p> Ingrese sus datos </p>
                     <div>
                         <form id="formregistro" action="../modelos/guardarAsociado.php" method="POST">
                             <div class="grupo-input">
                                 <div>
                                     <div class="grupo-input">
                                         <label> Ingrese su documento</label>
-                                        <input id="documento" name="documento" type="number" required placeholder="Ejemplo: 1025064602">
+                                        <input id="documento" name="documento" type="number" required
+                                            placeholder="Ejemplo: 1025064602">
                                     </div>
                                     <div class="grupo-input">
                                         <label> Ingrese su nombre</label>
-                                        <input type="text" id="nombre" name="nombres" required placeholder="Ingresar nombre completo">
+                                        <input type="text" id="nombre" name="nombres" required
+                                            placeholder="Ingresar nombre completo">
                                     </div>
                                     <div class="grupo-input">
                                         <label> Ingresar apellido</label>
@@ -40,11 +42,13 @@
                                     </div>
                                     <div class="grupo-input">
                                         <label> Ingresar telefono</label>
-                                        <input id="telefono" name="telefono" type="number" required placeholder="Ejemplo: 3133916257">
+                                        <input id="telefono" name="telefono" type="number" required
+                                            placeholder="Ejemplo: 3133916257">
                                     </div>
                                     <div class="grupo-input">
                                         <label> Ingresar su email </label>
-                                        <input type="text" id="email" name="email" required placeholder="Ejemplo: juan@gmail.com">
+                                        <input type="text" id="email" name="email" required
+                                            placeholder="Ejemplo: juan@gmail.com">
                                     </div>
                                     <div class="grupo-input">
                                         <label> Ingresar su ciudad </label>
@@ -54,21 +58,33 @@
                                             <option value="nobsa"> Nobsa </option>>
                                         </select>
                                     </div>
+                                   
                                     <div class="grupo-input">
                                         <label> Ingresar su genero </label>
                                         <label>
-                                            <input type="radio" id="femenino" name="genero" value="femenino">
+                                            <input type="radio" id="femenino" name="genero" value="Femenino">
                                             <spam>Femenino</spam>
                                             <label>
                                                 <label>
-                                                    <input type="radio" id="masculino" name="genero" value="masculino">
+                                                    <input type="radio" id="masculino" name="genero" value="Masculino">
                                                     <spam>Masculino</spam>
                                                     <label>
                                                         <label>
-                                                            <input type="radio" id="otro" name="genero" value="otro">
+                                                            <input type="radio" id="otro" name="genero" value="Otro">
                                                             <spam>Otro</spam>
                                                             <label>
                                     </div>
+                                     <div class="grupo-input">
+                                        <label> Ingresar su contraseña </label>
+                                        <input type="password" id="contraseña" name="contraseña" required
+                                            placeholder="Ejemplo: ********">
+                                    </div>
+                                    <div class="grupo-input">
+                                        <label> Confirmar contraseña </label>
+                                        <input type="password" id="confirmarContraseña" name="confirmarContraseña" required
+                                            placeholder="Ejemplo: ********">
+                                    </div>
+                                    
                                     <div class="grupo-botones">
                                         <button type="submit"> Guardar </button>
                                         <button type="reset"> Limpiar todo </button>
@@ -76,5 +92,7 @@
                                     <p id="mensajeRegistro" role="alert" aria-live="polite"> </p>
 
                         </form>
+
 <body>
+    <script src="../controlador/asociado.js"></script>
     <html>
