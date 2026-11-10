@@ -32,7 +32,7 @@ class asociado {
     }
 
     public function guardar() {
-        $sql = "INSERT INTO asociados (documento, nombres, apellidos, fechaNacimiento, genero, direccionResidencia, ciudad, telefono, email, contraseña) VALUES (:documento, :nombres, :apellidos, :fechaNacimiento, :genero, :direccionResidencia, :ciudad, :telefono, :email, :contraseña)";
+        $sql = "INSERT INTO asociados (documento, nombres, apellidos, fechaNacimiento, genero, direccionResidencia, ciudad, telefono, email, contraseña) VALUES (:documento, :nombres, :apellidos, :fechaNacimiento, :genero, :direccionResidencia, :ciudad, :telefono, :email, :contrasena)";
         $consulta= $this->conexion->prepare($sql);
         return $consulta->execute([
             ':documento' => $this->documento,
@@ -44,7 +44,7 @@ class asociado {
             ':ciudad' => $this->ciudad,
             ':telefono' => $this->telefono,
             ':email' => $this->email,
-            ':contraseña' => $this->contraseña
+            ':contrasena' => $this->contraseña
         ]);
     }
 }

@@ -1,98 +1,99 @@
 <!DOCTYPE html>
 <html lang="es">
 
-<head meta charset="UFT-8">
-    <title> MR Club </title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../accets/CSS/estilos.css">
-
-    <head>
-
-    <body>
-        <div class="contenedor-formulario">
-            <h2> Registro de asociados <h2>
-                    <p> Ingrese sus datos </p>
-                    <div>
-                        <form id="formregistro" action="../modelos/guardarAsociado.php" method="POST">
-                            <div class="grupo-input">
-                                <div>
-                                    <div class="grupo-input">
-                                        <label> Ingrese su documento</label>
-                                        <input id="documento" name="documento" type="number" required
-                                            placeholder="Ejemplo: 1025064602">
-                                    </div>
-                                    <div class="grupo-input">
-                                        <label> Ingrese su nombre</label>
-                                        <input type="text" id="nombre" name="nombres" required
-                                            placeholder="Ingresar nombre completo">
-                                    </div>
-                                    <div class="grupo-input">
-                                        <label> Ingresar apellido</label>
-                                        <input type="text" id="apellido" name="apellidos" required
-                                            placeholder="Ingresar apellido completo">
-                                    </div>
-                                    <div class="grupo-input">
-                                        <label> Fecha de nacimiento</label>
-                                        <input type="date" id="fechaNacimiento" name="fechaNacimiento" required
-                                            placeholder="Ejemplo: 08/08/2009">
-                                    </div>
-                                    <div class="grupo-input">
-                                        <label> Ingresar direccion</label>
-                                        <input type="text" id="direccion" name="direccionResidencia" required
-                                            placeholder="Ejemplo: car 26a #24-25">
-                                    </div>
-                                    <div class="grupo-input">
-                                        <label> Ingresar telefono</label>
-                                        <input id="telefono" name="telefono" type="number" required
-                                            placeholder="Ejemplo: 3133916257">
-                                    </div>
-                                    <div class="grupo-input">
-                                        <label> Ingresar su email </label>
-                                        <input type="text" id="email" name="email" required
-                                            placeholder="Ejemplo: juan@gmail.com">
-                                    </div>
-                                    <div class="grupo-input">
-                                        <label> Ingresar su ciudad </label>
-                                        <select id="ciudad" name="ciudad" required>
-                                            <option value="sogamoso"> Sogamoso </option>>
-                                            <option value="duitama"> Duitama </option>>
-                                            <option value="nobsa"> Nobsa </option>>
-                                        </select>
-                                    </div>
-                                   
-                                    <div class="grupo-input">
-                                        <label> Ingresar su genero </label>
-                                        <label>
-                                            <input type="radio" id="femenino" name="genero" value="Femenino">
-                                            <spam>Femenino</spam>
-                                            <label>
-                                                <label>
-                                                    <input type="radio" id="masculino" name="genero" value="Masculino">
-                                                    <spam>Masculino</spam>
-                                                    <label>
-                                                        <label>
-                                                            <input type="radio" id="otro" name="genero" value="Otro">
-                                                            <spam>Otro</spam>
-                                                            <label>
-                                    </div>
-                                     <div class="grupo-input">
-                                        <label> Ingresar su contraseña </label>
-                                        <input type="password" id="contraseña" name="contraseña" required
-                                            placeholder="Ejemplo: ********">
-                                    </div>
-                                    <div class="grupo-input">
-                                        <label> Confirmar contraseña </label>
-                                        <input type="password" id="confirmarContraseña" name="confirmarContraseña" required
-                                            placeholder="Ejemplo: ********">
-                                    </div>
-                                    
-                                    <div class="grupo-botones">
-                                        <button type="submit"> Guardar </button>
-                                        <button type="reset"> Limpiar todo </button>
-                                    </div>
-                                    <p id="mensajeRegistro" role="alert" aria-live="polite"> </p>
-
-                        </form>
+    <title>MR CLUB</title>
+</head>
 
 <body>
+    <div class="contenedor-formulario">
+        <h2>Registro de asociados</h2>
+        <p>Ingrese sus datos</p>
+        
+        <form id="formregistro" action="../modelos/guardarAsociado.php" method="POST">
+            <div class="grupo-input">
+                <label>Ingrese su documento</label>
+                <input id="documento" name="documento" type="number" required placeholder="Ejemplo: 1025064602">
+            </div>
+            
+            <div class="grupo-input">
+                <label>Ingrese su nombre</label>
+                <input type="text" id="nombre" name="nombres" required placeholder="Ingresar nombre completo">
+            </div>
+            
+            <div class="grupo-input">
+                <label>Ingresar apellido</label>
+                <input type="text" id="apellido" name="apellidos" required placeholder="Ingresar apellido completo">
+            </div>
+            
+            <div class="grupo-input">
+                <label>Fecha de nacimiento</label>
+                <input type="date" id="fechaNacimiento" name="fechaNacimiento" required>
+            </div>
+            
+            <div class="grupo-input">
+                <label>Ingresar direccion</label>
+                <input type="text" id="direccion" name="direccionResidencia" required placeholder="Ejemplo: car 26a #24-25">
+            </div>
+            
+            <div class="grupo-input">
+                <label>Ingresar telefono</label>
+                <input id="telefono" name="telefono" type="number" required placeholder="Ejemplo: 3133916257">
+            </div>
+            
+            <div class="grupo-input">
+                <label>Ingresar su email</label>
+                <input type="email" id="email" name="email" required placeholder="Ejemplo: juan@gmail.com">
+            </div>
+            
+            <div class="grupo-input">
+                <label>Ingresar su ciudad</label>
+                <select id="ciudad" name="ciudad" required>
+                    <option value="sogamoso">Sogamoso</option>
+                    <option value="duitama">Duitama</option>
+                    <option value="nobsa">Nobsa</option>
+                </select>
+            </div>
+            
+            <div class="grupo-input">
+                <label>Ingresar su genero</label>
+                <label>
+                    <input type="radio" id="femenino" name="genero" value="Femenino">
+                    <span>Femenino</span>
+                </label>
+                <label>
+                    <input type="radio" id="masculino" name="genero" value="Masculino">
+                    <span>Masculino</span>
+                </label>
+                <label>
+                    <input type="radio" id="otro" name="genero" value="Otro">
+                    <span>Otro</span>
+                </label>
+            </div>
+            
+            <div class="grupo-input">
+                <label>Ingresar su contraseña</label>
+                <input type="password" id="contraseña" name="contraseña" required placeholder="Ejemplo: ********">
+            </div>
+            
+            <div class="grupo-input">
+                <label>Confirmar contraseña</label>
+                <input type="password" id="confirmarContraseña" name="confirmarContraseña" required placeholder="Ejemplo: ********">
+            </div>
+            
+            <div class="grupo-botones">
+                <button type="submit">Guardar</button>
+                <button type="reset">Limpiar todo</button>
+            </div>
+            
+            <p id="mensajeRegistro" role="alert" aria-live="polite"></p>
+        </form>
+    </div>
+
     <script src="../controlador/asociado.js"></script>
-    <html>
+</body>
+
+</html>

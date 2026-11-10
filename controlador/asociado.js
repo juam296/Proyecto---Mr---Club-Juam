@@ -8,7 +8,10 @@ formregistro.addEventListener('submit', async function (e) {
     if(asociado.contraseña !== asociado.confirmarContraseña) {
         document.getElementById("mensajeRegistro").textContent =
         "Las contraseñas no coinciden.";
+        return;
     }
+
+    delete asociado.confirmarContraseña; // Eliminar el campo de confirmación de contraseña antes de enviar los datos
 
     botonGuardar.disabled = true; // Deshabilitar el botón de envío
     document.getElementById('mensajeRegistro').textContent = 'Guardando...';
@@ -17,8 +20,11 @@ formregistro.addEventListener('submit', async function (e) {
     alert ("Datos a enviar: " + JSON.stringify(asociado)); // Mostrar los datos en un alert
     try {
 
-        const respuesta = await fetch(formregistro.action,{method: 'POST',headers: {'Content-Type': 'application/json'}, body: JSON.stringify(asociado)});
-        // Pasar la respuesta JSON a un objeto JavaScript
+        const respuesta = await fetch(formregistro.action,{
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'}, 
+            body: JSON.stringify(asociado)});
+        
         const resultado = await respuesta.json();
         
         document.getElementById('mensajeRegistro').textContent = resultado.mensaje;
