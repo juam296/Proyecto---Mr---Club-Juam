@@ -33,7 +33,7 @@ try {
     $consulta->execute([':email' => $email]);
     $asociado = $consulta->fetch();
 
-    if(!asociado || !password_verify($contraseña, $asociado['contraseña']) || empty($asociado['contraseña'])){
+    if(!$asociado || !password_verify($contraseña, $asociado['contraseña']) || empty($asociado['contraseña'])){
         http_response_code(401);
         throw new Exception("Email o contraseña incorrectos.");
     }
@@ -45,7 +45,7 @@ try {
         "success" => true,
         "rol" => $_SESSION['rol'],
         "nombre" => $asociado['nombres'] . " " . $asociado["apellidos"],
-    ])
+    ]);
 } catch(PDOException $e) {
     $errorMensaje = "Error al iniciar sesión." . $e->getMessage();
     echo json_encode([

@@ -1,9 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
     const logeado = localStorage.getItem('logeado');
     if (logeado !== 'true') {
-        window.location.href = 'login.html';
+        window.location.href = '../vista/login.html';
         return;
     }
+
     const nombre = localStorage.getItem('nombre');
     const rol = localStorage.getItem('rol');
     
@@ -17,13 +18,16 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('tarjetasAdmin').classList.add('d-none');
         document.getElementById('tarjetasAsociado').classList.remove('d-none');
     }
-
-    // Funcionalidad extra para el botón de cerrar sesión
-    const btnCerrar = document.getElementById('btnCerrar');
-    if(btnCerrar) {
-        btnCerrar.addEventListener('click', () => {
-            localStorage.clear();
-            window.location.href = 'login.html';
-        });
-    }
 });
+
+async function cerrarSesion() {
+    try {
+        const respuesta = await fetch('../modelos/cerrarSesion.php', {method: 'POST'});
+        if (!respuesta.ok) {
+            throw new Error('Error al cerrar sesión');
+        }
+        localStorage.clear();
+        window.location.href = '../vista/login.html';
+    } catch (error) {
+        console.error('Error al cerrar sesión:', error);
+    }}
