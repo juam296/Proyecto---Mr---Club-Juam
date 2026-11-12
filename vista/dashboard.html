@@ -48,6 +48,9 @@
         .text-primary {
             color: #2862a0 !important;
         }
+        .tarjeta-enlace {
+        text-decoration: none; 
+    }
     </style>
 </head>
 
@@ -66,7 +69,8 @@
     <div class="container py-4">
         
         <div id="tarjetasAdmin" class="row g-4">
-            <h5 class="mb-2 fw-bold text-white">Módulos del Administrador</h5>
+            <a href="registro.html" class="tarjeta-enlace">
+                <h5 class="mb-2 fw-bold text-white">Módulos del Administrador</h5>
             <div class="col-md-3">
                 <div class="card modulo-card shadow-sm p-3">
                     <i class="bi bi-people icono-principal"></i>
@@ -74,33 +78,40 @@
                     <strong>Gestión de asociados</strong>
                     <p class="small text-muted mt-2">Administra la información de los asociados, incluyendo sus datos personales y estado de cuenta.</p>
                 </div>
+                </a>
             </div>
 
             <div class="col-md-3">
-                <div class="card modulo-card shadow-sm p-3">
+                <a href="registroActividades.html" class="tarjeta-enlace">
+                <div class="card modulo-card shadow-sm p-3" >
                     <i class="bi bi-calendar-event icono-principal"></i>
                     <h4 class="text-primary">Actividades</h4>
                     <strong>Gestión de Actividades</strong>
                     <p class="small text-muted mt-2">Administra la información de las actividades, incluyendo sus datos, historial y programación.</p>
                 </div>
+                </a>
             </div>
 
             <div class="col-md-3">
+                <a href="prestamos.html" class="tarjeta-enlace">
                 <div class="card modulo-card shadow-sm p-3">
                     <i class="bi bi-person-check icono-principal"></i>
                     <h4 class="text-primary">Prestamos</h4>
                     <strong>Gestión de Prestamos</strong>
                     <p class="small text-muted mt-2">Administra la información de los préstamos, incluyendo sus datos, historial y programación.</p>
                 </div>
+                </a>
             </div>
             
             <div class="col-md-3">
+                <a href="pagos.html" class="tarjeta-enlace">
                 <div class="card modulo-card shadow-sm p-3">
                     <i class="bi bi-chat-square-text icono-principal"></i>
-                    <h4 class="text-primary">Reportes</h4>
-                    <strong>Gestión de Reportes</strong>
-                    <p class="small text-muted mt-2">Administra la información de los reportes, incluyendo sus datos, historial y programación.</p>
+                    <h4 class="text-primary">Pagos</h4>
+                    <strong>Gestión de Pagos</strong>
+                    <p class="small text-muted mt-2">Administra la información de los pagos, incluyendo sus datos, historial y programación.</p>
                 </div>
+                </a>
             </div>
         </div>
 

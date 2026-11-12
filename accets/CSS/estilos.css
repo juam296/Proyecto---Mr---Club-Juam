@@ -76,12 +76,12 @@ button:active {
 }
 
 button:first-child {
-    background-color: #4f46e5;
+    background-color: #2862a0;
     color: #ffffff;
 }
 
 button:first-child:hover {
-    background-color: #4338ca;
+    background-color: #2862a0;
 }
 button:last-child {
     background-color: #f3f4f6;
@@ -98,7 +98,7 @@ input, select {
 }
 
 input:focus, select:focus {
-    border-color: #4f46e5;
+    border-color:#2862a0;
     outline: none;
     box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
 }
