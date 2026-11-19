@@ -1,6 +1,7 @@
 const listaActividades = document.getElementById("listaActividades");
 let esAdministrador = false;
 let actividades=[];
+let accionesConfiguradas = false;
 async function solicitarApi(metodo,datos){
     const opciones={
         method: metodo,
@@ -31,7 +32,7 @@ async function cargarActividades() {
 
         esAdministrador = resultado.rol === "Admin";
         configuracionesAcciones();
-        actividades =resultado.act0ividades;
+        actividades =resultado.actividades;
         mostrarActividades();
     } catch (error) {
         alert("Error al cargar la actividades: " + error.message);
@@ -88,3 +89,36 @@ function crearCelda(texto){
     celda.textContent = texto;
     return celda;
 }
+
+async function eliminarActividad(actividad) {
+    const confrimar = window.confirm(` ¿Deseas eliminar la actividad? "${actividad.nombreActividad}"?`,);
+
+    if (!confrimar) {
+        return
+    }
+
+    try {
+        await solicitarApi("DELETE",{idActividad:actividad.idActividad});
+        await cargarActividades();
+        alert("Actividad eliminada correctamente");
+    } catch(error) {
+        alert(error.message);
+    }
+}
+
+async function configurarAcciones () {
+    if (accionesConfiguradas) {
+        return;
+    } 
+    const botonNueva = document.getElementById("nuevaActividad");
+    const encabezadoAcciones = document.getElementById("encabezadoAcciones");
+
+    if (esAdministrador) {
+        botonNueva.classList.remove("d-none");
+        encabezadoAcciones.classList.remove("d-none");
+        accionesConfiguradas = true; 
+        return;
+    }
+} 
+
+cargarActividades();    
