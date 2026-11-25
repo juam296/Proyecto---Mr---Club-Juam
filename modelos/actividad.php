@@ -28,7 +28,7 @@ class Actividad {
             ':nombreActividad' => $datos['nombreActividad'],
             ':fechaEvento' => $datos['fechaEvento'],
             ':municipio' => $datos['municipio'],
-            ':totalRecaudado' => $datos['totalRecaudado']
+            ':totalRecaudado' => $datos['totalRecaudado'] ?? null
         ]);
     }
 
@@ -49,7 +49,7 @@ class Actividad {
             ':nombreActividad' => $datos['nombreActividad'],
             ':fechaEvento' => $datos['fechaEvento'],
             ':municipio' => $datos['municipio'],
-            ':totalRecaudado' => $datos['totalRecaudado']
+            ':totalRecaudado' => $datos['totalRecaudado'] ?? null
         ]);
     
 

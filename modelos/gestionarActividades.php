@@ -80,6 +80,7 @@ try{
             $datos=leerDatos();
             $datos["idActividad"]=validarId($datos["idActividad"] ?? null);
             $datos = array_merge($datos,validarActividad($datos));
+            $datos["totalRecaudado"] = $datos["totalRecaudado"] ?? null;
             
             if(!$actividad->editar($datos)){
                 http_response_code(404);
