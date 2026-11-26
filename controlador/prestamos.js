@@ -1,175 +1,244 @@
-const listaactividades = document.getElementById("listaPrestamo");
+const listaPrestamos = document.getElementById("listaPrestamo");
+const formularioPrestamo = document.getElementById("formPrestamo");
+
 let esAdministrador = false;
-let prestamo = [];
-let accionesConfiguradas = false;
-const formularioActividad = document.getElementById("formPrestamo");
-const modalActividad = new bootstrap.Modal(
-    document.getElementById("modalPrestamo"),
-);
+let prestamos = [];
+let asociadoSeleccionadoId = null;
+let modalPrestamo = null;
 
+function obtenerModalPrestamo() {
+    if (!modalPrestamo) {
+        const elementoModal = document.getElementById("modalPrestamo");
+        if (!elementoModal || typeof bootstrap === "undefined") {
+            return null;
+        }
+        modalPrestamo = bootstrap.Modal.getOrCreateInstance(elementoModal);
+    }
+    return modalPrestamo;
+}
 
-async function solicitarApi(metodo, datos) {
+async function cargarAsociados() {
+    if (!esAdministrador) {
+        return;
+    }
+
+    const respuesta = await fetch("../modelos/gestionarAsociado.php", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" }
+    });
+    const resultado = await respuesta.json();
+    if (!respuesta.ok) {
+        throw new Error(resultado.message || resultado.mensaje || "Error al cargar asociados.");
+    }
+
+    const selector = document.getElementById("asociado");
+    selector.replaceChildren();
+
+    const opcionInicial = document.createElement("option");
+    opcionInicial.value = "";
+    opcionInicial.textContent = "Seleccione un asociado";
+    selector.append(opcionInicial);
+
+    (resultado.asociados || []).forEach((asociado) => {
+        const opcion = document.createElement("option");
+        opcion.value = asociado.idAsociado;
+        opcion.textContent = `${asociado.nombres} ${asociado.apellidos}`;
+        selector.append(opcion);
+    });
+}
+
+async function solicitarApi(metodo, datos = null) {
     const opciones = {
         method: metodo,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(datos)
-    }
+        headers: { "Content-Type": "application/json" }
+    };
 
     if (datos) {
         opciones.body = JSON.stringify(datos);
     }
-    const respuesta = await fetch("../Modelos/prestamos.php", opciones);
-    const resultado = await respuesta.json();
+
+    const respuesta = await fetch("../modelos/prestamos.php", opciones);
+    let resultado = {};
+
+    try {
+        resultado = await respuesta.json();
+    } catch {
+        throw new Error("La respuesta del servidor no es válida.");
+    }
+
     if (respuesta.status === 401) {
-        window.location.href = "../Vista/login.html";
+        window.location.href = "../vista/login.html";
+        return;
     }
     if (!respuesta.ok) {
-        throw new Error(resultado.message || resultado.mensaje || "Error en la solicitud");
+        throw new Error(resultado.message || resultado.mensaje || "Error en la solicitud.");
     }
     return resultado;
 }
 
-async function cargarPrestamo() {
+function crearCelda(texto) {
+    const celda = document.createElement("td");
+    celda.textContent = texto ?? "";
+    return celda;
+}
+
+function formatearValor(valor) {
+    const numero = Number(valor);
+    if (!Number.isFinite(numero)) {
+        return valor ?? "";
+    }
+    return numero.toLocaleString("es-CO", {
+        style: "currency",
+        currency: "COP"
+    });
+}
+
+function mostrarPrestamos() {
+    listaPrestamos.replaceChildren();
+
+    if (prestamos.length === 0) {
+        const fila = document.createElement("tr");
+        const celda = document.createElement("td");
+        celda.colSpan = esAdministrador ? 7 : 6;
+        celda.className = "text-center py-4 text-muted";
+        celda.textContent = "No hay préstamos disponibles.";
+        fila.append(celda);
+        listaPrestamos.append(fila);
+        return;
+    }
+
+    prestamos.forEach((prestamo) => {
+        const fila = document.createElement("tr");
+        fila.append(
+            crearCelda(prestamo.asociado ?? prestamo.Asociado),
+            crearCelda(formatearValor(prestamo.valorPrestamo ?? prestamo.valor)),
+            crearCelda(prestamo.tasaInteres),
+            crearCelda(prestamo.numeroCuotas ?? prestamo.cuotas),
+            crearCelda(prestamo.fechaPrestamo),
+            crearCelda(prestamo.estado)
+        );
+
+        if (esAdministrador) {
+            const acciones = document.createElement("td");
+            acciones.className = "text-nowrap";
+
+            const botonEditar = document.createElement("button");
+            botonEditar.type = "button";
+            botonEditar.className = "btn btn-sm btn-outline-primary me-2";
+            botonEditar.innerHTML = '<i class="bi bi-pencil-square"></i>';
+            botonEditar.setAttribute("aria-label", "Editar préstamo");
+            botonEditar.addEventListener("click", () => abrirEdicion(prestamo));
+
+            const botonEliminar = document.createElement("button");
+            botonEliminar.type = "button";
+            botonEliminar.className = "btn btn-sm btn-outline-danger";
+            botonEliminar.innerHTML = '<i class="bi bi-trash"></i>';
+            botonEliminar.setAttribute("aria-label", "Eliminar préstamo");
+            botonEliminar.addEventListener("click", () => eliminarPrestamo(prestamo));
+
+            acciones.append(botonEditar, botonEliminar);
+            fila.append(acciones);
+        }
+
+        listaPrestamos.append(fila);
+    });
+}
+
+async function cargarPrestamos() {
     try {
         const resultado = await solicitarApi("GET");
         esAdministrador = resultado.rol === "admin";
-        configurarAcciones(); // Corregido el nombre de la función
-        prestamo = resultado.prestamo;
-        mostrarPrestamo();
+        prestamos = resultado.prestamos || resultado.prestamo || [];
+        await cargarAsociados();
 
-    } catch (error) {
-        alert("Error al cargar los prestamos: " + error.message);
-    }
-
-    function mostrarPrestamo() {
-        listaprestamo.replaceChildren();
-        if (prestamo.length === 0) {
-            const fila = document.createElement("tr");
-            const celda = document.createElement("td");
-            celda.colSpan = esAdministrador ? 5 : 4;
-            celda.className = "text-center py-4 text-muted";
-            celda.textContent = "No hay prestamos disponibles.";
-            fila.append(celda);
-            listaactividades.append(fila);
-            return;
-        }
-        actividades.forEach((prestamo) => {
-            const fila = document.createElement("tr");
-            fila.append(
-                // aca toca configurar la parte de adelante de los prestamos x actividad
-                crearCelda(prestamo.Asociado),
-                crearCelda(prestamo.fechaEvento),
-                crearCelda(actividad.municipio),
-                crearCelda(actividad.totalRecaudado === null ? "Pendiente" : Number(actividad.totalRecaudado).toLocaleString("es-CO", { style: "currency", currency: "COP" })),
-            );
-            if (esAdministrador) {
-                const acciones = document.createElement("td");
-                acciones.className = "text-nowrap";
-
-                const botonEditar = document.createElement("button");
-                botonEditar.type = "button";
-                botonEditar.className = "btn btn-sm btn-outline-primary me-2";
-                botonEditar.innerHTML = '<i class="bi bi-pencil-square"></i>';
-                botonEditar.addEventListener("click", () => abrirEdicion(actividad));
-
-                const botonEliminar = document.createElement("button");
-                botonEliminar.type = "button";
-                botonEliminar.className = "btn btn-sm btn-outline-danger";
-                botonEliminar.innerHTML = '<i class="bi bi-trash"></i>';
-                botonEliminar.addEventListener("click", () => eliminarActividad(actividad));
-
-
-                acciones.append(botonEditar, botonEliminar);
-                fila.append(acciones);
+        const botonNuevo = document.getElementById("nuevoPrestamo");
+        const encabezadoAcciones = document.getElementById("encabezadoAcciones");
+        if (esAdministrador) {
+            botonNuevo.classList.remove("d-none");
+            encabezadoAcciones.classList.remove("d-none");
+            if (!botonNuevo.dataset.configurado) {
+                botonNuevo.addEventListener("click", nuevoPrestamo);
+                botonNuevo.dataset.configurado = "true";
             }
-            listaactividades.append(fila);
-        });
-    }
-    function crearCelda(texto) {
+        }
+
+        mostrarPrestamos();
+    } catch (error) {
+        listaPrestamos.replaceChildren();
+        const fila = document.createElement("tr");
         const celda = document.createElement("td");
-        celda.textContent = texto;
-        return celda;
+        celda.colSpan = 7;
+        celda.className = "text-center py-4 text-danger";
+        celda.textContent = error.message;
+        fila.append(celda);
+        listaPrestamos.append(fila);
     }
 }
 
-async function eliminarActividad(actividad) {
-    const confirmar = window.confirm(`¿Desea eliminar la actividad "${actividad.nombreActividad}"?`);
+function nuevoPrestamo() {
+    formularioPrestamo.reset();
+    asociadoSeleccionadoId = null;
+    document.getElementById("idPrestamo").value = "";
+    document.getElementById("tituloModalPrestamo").textContent = "Nuevo préstamo";
+    document.getElementById("guardarPrestamo").textContent = "Guardar préstamo";
+    obtenerModalPrestamo()?.show();
+}
 
-    if (!confirmar) {
+function abrirEdicion(prestamo) {
+    formularioPrestamo.reset();
+    asociadoSeleccionadoId = prestamo.idAsociado ?? null;
+    document.getElementById("idPrestamo").value = prestamo.idPrestamo ?? "";
+    document.getElementById("asociado").value = prestamo.idAsociado ?? "";
+    document.getElementById("valorPrestamo").value = prestamo.valorPrestamo ?? prestamo.valor ?? "";
+    document.getElementById("tasaInteres").value = prestamo.tasaInteres ?? "";
+    document.getElementById("numeroCuotas").value = prestamo.numeroCuotas ?? prestamo.cuotas ?? "";
+    document.getElementById("fechaPrestamo").value = prestamo.fechaPrestamo ?? "";
+    document.getElementById("estado").value = prestamo.estado ?? "Pendiente";
+    document.getElementById("tituloModalPrestamo").textContent = "Editar préstamo";
+    document.getElementById("guardarPrestamo").textContent = "Guardar cambios";
+    obtenerModalPrestamo()?.show();
+}
+
+async function eliminarPrestamo(prestamo) {
+    const asociado = prestamo.asociado ?? prestamo.Asociado ?? "este asociado";
+    if (!window.confirm(`¿Desea eliminar el préstamo de "${asociado}"?`)) {
         return;
     }
 
     try {
-        await solicitarApi("DELETE", { idActividad: actividad.idActividad });
-        await cargarActividades();
-        alert("Se elimino Correctamente");
+        await solicitarApi("DELETE", { idPrestamo: prestamo.idPrestamo });
+        await cargarPrestamos();
+        alert("Préstamo eliminado correctamente.");
     } catch (error) {
         alert(error.message);
     }
 }
 
-function configurarAcciones() {
-    if (accionesConfiguradas) {
-        return;
-    }
-    const botonNueva = document.getElementById("nuevaActividad");
-    const encabezadoAcciones = document.getElementById("encabezadoAcciones");
-
-    if (esAdministrador) {
-        botonNueva.classList.remove("d-none");
-        botonNueva.addEventListener("click", () => nuevaActividad());
-        encabezadoAcciones.classList.remove("d-none");
-        accionesConfiguradas = true;
-        return;
-    }
-}
-
-function abrirEdicion(actividad) {
-    formularioActividad.reset();
-    document.getElementById("idActividad").value = actividad.idActividad;
-    document.getElementById("nombreActividad").value = actividad.nombreActividad;
-    document.getElementById("fechaEvento").value = actividad.fechaEvento;
-    document.getElementById("municipio").value = actividad.municipio;
-    document.getElementById("totalRecaudado").value =
-        actividad.totalRecaudado ?? "";
-    document.getElementById("campoTotalRecaudado").classList.remove("d-none");
-    document.getElementById("tituloModalActividad").textContent =
-        "Editar actividad";
-    document.getElementById("guardarActividad").textContent = "Guardar cambios";
-    modalActividad.show();
-}
-
-function nuevaActividad() {
-    formularioActividad.reset();
-    document.getElementById("campoTotalRecaudado").classList.add("d-none");
-    document.getElementById("tituloModalActividad").textContent =
-        "Crear actividad";
-    document.getElementById("guardarActividad").textContent = "Guardar actividad";
-    modalActividad.show();
-}
-
-formularioActividad.addEventListener("submit", async (evento) => {
+formularioPrestamo.addEventListener("submit", async (evento) => {
     evento.preventDefault();
-    const idActividad = document.getElementById("idActividad").value;
-
+    const idPrestamo = document.getElementById("idPrestamo").value;
+    const idAsociado = Number(document.getElementById("asociado").value);
     const datos = {
-        nombreActividad: document.getElementById("nombreActividad").value.trim(),
-        fechaEvento: document.getElementById("fechaEvento").value,
-        municipio: document.getElementById("municipio").value.trim()
-    }
-    if (idActividad) {
-        datos.idActividad = Number(idActividad);
-        const total = document.getElementById("totalRecaudado").value;
-        datos.totalRecaudado = total === "" ? null : Number(total);
+        idAsociado: idAsociado || null,
+        valorPrestamo: Number(document.getElementById("valorPrestamo").value),
+        tasaInteres: Number(document.getElementById("tasaInteres").value),
+        numeroCuotas: Number(document.getElementById("numeroCuotas").value),
+        fechaPrestamo: document.getElementById("fechaPrestamo").value,
+        estado: document.getElementById("estado").value
+    };
+
+    if (idPrestamo) {
+        datos.idPrestamo = Number(idPrestamo);
     }
 
     try {
-        await solicitarApi(idActividad ? "PUT" : "POST", datos);
-        modalActividad.hide();
-        alert("actualizada correctamente")
-        cargarActividades();
+        await solicitarApi(idPrestamo ? "PUT" : "POST", datos);
+        obtenerModalPrestamo()?.hide();
+        await cargarPrestamos();
+        alert(idPrestamo ? "Préstamo actualizado correctamente." : "Préstamo creado correctamente.");
     } catch (error) {
-        alert(error.message)
+        alert(error.message);
     }
 });
-cargarActividades();
+
+cargarPrestamos();
